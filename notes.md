@@ -14,7 +14,7 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | View profile page                                   | view.tsx           | [GET] /api/user/me| `SELECT userId FROM auth WHERE token=?`             |
 | View franchise<br/>(as diner)                       | view.tsx           | [GET] /api/franchise                  | `SELECT id, name FROM franchise WHERE name LIKE ? LIMIT ${limit + 1} OFFSET ${offset}` <br/>`SELECT id, name FROM store WHERE franchiseId=?`             |
 | Logout                                              | logout.tsx         | [DELETE] /api/auth| `DELETE FROM auth WHERE token=?`             |
-| View About page                                     |                    |                   |              |
+| View About page                                     | about.tsx          | none              | none         |
 | View History page                                   |                    |                   |              |
 | Login as franchisee<br/>(f@jwt.com, pw: franchisee) |                    |                   |              |
 | View franchise<br/>(as franchisee)                  |                    |                   |              |
