@@ -18,8 +18,8 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | View History page                                   | history.tsx        | [GET] /api/order  | `SELECT id, franchiseId, storeId, date FROM dinerOrder WHERE dinerId=? LIMIT ${offset},${config.db.listPerPage}` <br/>`SELECT id, menuId, description, price FROM orderItem WHERE orderId=?`             |
 | Login as franchisee<br/>(f@jwt.com, pw: franchisee) | login.tsx          | [PUT] /api/auth   | `SELECT * FROM user WHERE email=?`             <br/>`SELECT * FROM userRole WHERE userId=?`             |
 | View franchise<br/>(as franchisee)                  | franchiseDashboard.tsx | [GET] /api/franchise/:userId | `SELECT objectId FROM userRole WHERE role='franchisee' AND userId=?` <br/>`SELECT id, name FROM franchise WHERE id in (${franchiseIds.join(',')})`             |
-| Create a store                                      |                    |                   |              |
-| Close a store                                       |                    |                   |              |
+| Create a store                                      | createStore.tsx    | [POST] /api/franchise/:franchiseId/store | `INSERT INTO store (franchiseId, name) VALUES (?, ?)`             |
+| Close a store                                       | closeStore.tsx                   |                   |              |
 | Login as admin<br/>(a@jwt.com, pw: admin)           |                    |                   |              |
 | View Admin page                                     |                    |                   |              |
 | Create a franchise for t@jwt.com                    |                    |                   |              |
