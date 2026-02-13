@@ -141,3 +141,19 @@ test('about and history pages', async ({ page }) => {
   await page.getByRole('link', { name: 'History' }).click();
   await expect(page.getByRole('heading')).toBeVisible();
 });
+
+test('admin dashboard renders', async ({ page }) => {
+    await page.route('*/**/api/user/me', async (route) => {
+        await route.fulfill({ json: adminUser() });
+    });
+    await page.route(/\/api\/franchise(\?.*)?$/, async (route) => {
+        await route.fulfill({ json: { franchises: [] } });
+    });
+
+    await page.goto('/#/admin');
+    await expect(page.getByRole('heading')).toBeVisible();
+});
+
+function adminUser(): User {
+    return { id: '1', name: 'Admin', email: 'admin@jwt.com', password: 'x', roles: [{ role: Role.Admin }] };
+}
