@@ -110,7 +110,7 @@ test("login", async ({ page }) => {
 	await expect(page.getByRole("link", { name: "KC" })).toBeVisible();
 });
 
-test("purchase with login", async ({ page }) => {
+test("purchase", async ({ page }) => {
 	await basicInit(page);
 
 	// Go to order page
@@ -212,4 +212,16 @@ test("franchisee create", async ({ page }) => {
 	await page.getByRole('textbox', { name: 'store name' }).click();
 	await page.getByRole('textbox', { name: 'store name' }).fill('test store');
 	await page.getByRole('button', { name: 'Create' }).click();
+});
+
+test("logout", async ({ page }) => {
+	await page.goto('http://localhost:5173/');
+	await page.getByRole("link", { name: "Login" }).click();
+	await page.getByRole('textbox', { name: 'Email address' }).fill('d@jwt.com');
+	await page.getByRole('textbox', { name: 'Email address' }).press('Tab');
+	await page.getByRole('textbox', { name: 'Password' }).fill('diner');
+	await page.getByRole('button', { name: 'Login' }).click();
+	await page.getByRole('link', { name: 'Logout' }).click();
+	await expect(page.locator('#navbar-dark')).toContainText('Login');
+	await expect(page.locator('#navbar-dark')).toContainText('Register');
 });
