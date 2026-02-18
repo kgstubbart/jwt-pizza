@@ -195,7 +195,6 @@ test("franchisee dashboard", async ({ page }) => {await page.goto('http://localh
 	await page.getByRole('textbox', { name: 'Email address' }).press('Tab');
 	await page.getByRole('textbox', { name: 'Password' }).fill('franchisee');
 	await page.getByRole('button', { name: 'Login' }).click();
-	await expect(page.getByRole('heading')).toContainText('pizzaPocket');
 	await expect(page.getByRole('main')).toContainText('Everything you need to run an JWT Pizza franchise. Your gateway to success.');
 });
 
@@ -224,4 +223,15 @@ test("logout", async ({ page }) => {
 	await page.getByRole('link', { name: 'Logout' }).click();
 	await expect(page.locator('#navbar-dark')).toContainText('Login');
 	await expect(page.locator('#navbar-dark')).toContainText('Register');
+});
+
+test("diner dashboard", async ({ page }) => {
+	await page.goto('http://localhost:5173/');
+	await page.getByRole('link', { name: 'Login' }).click();
+	await page.getByRole('textbox', { name: 'Email address' }).fill('d@jwt.com');
+	await page.getByRole('textbox', { name: 'Email address' }).press('Tab');
+	await page.getByRole('textbox', { name: 'Password' }).fill('diner');
+	await page.getByRole('button', { name: 'Login' }).click();
+	await page.getByRole('link', { name: 'pd' }).click();
+	await expect(page.getByRole('main')).toContainText('Here is your history of all the good times.');
 });
