@@ -246,7 +246,7 @@ test("about and history pages", async ({ page }) => {
 	await expect(page.getByRole("heading")).toBeVisible();
 });
 
-test("admin dashboard (mocked)", async ({ page }) => {
+test("admin dashboard", async ({ page }) => {
 	await basicInit(page);
 	await page.getByRole("link", { name: "Login" }).click();
 	await page.getByRole("textbox", { name: "Email address" }).fill("a@jwt.com");
@@ -264,9 +264,13 @@ test("admin dashboard (mocked)", async ({ page }) => {
 		.getByRole("textbox", { name: "franchisee admin email" })
 		.fill("a@jwt.com");
 	await page.getByRole("button", { name: "Create" }).click();
+
+	await page.getByRole('textbox', { name: 'Filter franchises' }).click();
+	await page.getByRole('textbox', { name: 'Filter franchises' }).fill('p');
+	await page.getByRole('button', { name: 'Submit' }).click();
 });
 
-test("register (mocked)", async ({ page }) => {
+test("register", async ({ page }) => {
 	await basicInit(page);
 	await page.getByRole("link", { name: "Register" }).click();
 	await page.getByRole("textbox", { name: "Full name" }).fill("Test User");
@@ -280,7 +284,7 @@ test("register (mocked)", async ({ page }) => {
 	await page.getByRole("button", { name: "Register" }).click();
 });
 
-test("franchisee dashboard (mocked)", async ({ page }) => {
+test("franchisee dashboard", async ({ page }) => {
 	await basicInit(page);
 	await page.getByRole("link", { name: "Login" }).click();
 	await page.getByRole("textbox", { name: "Email address" }).fill("f@jwt.com");
@@ -295,7 +299,7 @@ test("franchisee dashboard (mocked)", async ({ page }) => {
 	);
 });
 
-test("franchisee create store (mocked)", async ({ page }) => {
+test("franchisee create store", async ({ page }) => {
 	await basicInit(page);
 	await page.getByRole("link", { name: "Login" }).click();
 	await page.getByRole("textbox", { name: "Email address" }).fill("f@jwt.com");
@@ -312,7 +316,7 @@ test("franchisee create store (mocked)", async ({ page }) => {
 	await page.getByRole("button", { name: "Create" }).click();
 });
 
-test("logout (mocked)", async ({ page }) => {
+test("logout", async ({ page }) => {
 	await basicInit(page);
 	await page.getByRole("link", { name: "Login" }).click();
 	await page.getByRole("textbox", { name: "Email address" }).fill("d@jwt.com");
@@ -324,7 +328,7 @@ test("logout (mocked)", async ({ page }) => {
 	await expect(page.locator("#navbar-dark")).toContainText("Register");
 });
 
-test("diner dashboard (mocked)", async ({ page }) => {
+test("diner dashboard", async ({ page }) => {
 	await basicInit(page);
 	await page.getByRole("link", { name: "Login" }).click();
 	await page.getByRole("textbox", { name: "Email address" }).fill("d@jwt.com");
@@ -341,4 +345,20 @@ test("invalid login", async ({ page }) => {
     await page.getByRole("textbox", { name: "Password" }).fill("wrongpassword");
     await page.getByRole("button", { name: "Login" }).click();
     await expect(page.getByRole("textbox", { name: "Email address" })).toBeVisible();
+});
+
+test("franchisee close store", async ({ page }) => {
+	await basicInit(page);
+	await page.getByRole("link", { name: "Login" }).click();
+	await page.getByRole("textbox", { name: "Email address" }).fill("f@jwt.com");
+	await page.getByRole("textbox", { name: "Email address" }).press("Tab");
+	await page.getByRole("textbox", { name: "Password" }).fill("franchisee");
+	await page.getByRole("button", { name: "Login" }).click();
+	await page
+		.getByLabel("Global")
+		.getByRole("link", { name: "Franchise" })
+		.click();
+	await page.getByRole('button', { name: 'Close' }).nth(1).click();
+	await expect(page.getByRole('main')).toContainText('Close');
+	await page.getByRole('button', { name: 'Close' }).click();
 });
