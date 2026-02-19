@@ -32,11 +32,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: start server so no mocks, need to get rid of eventually
-        run: |
-          npm run dev -- --host 127.0.0.1 --port 5173 &
-          npx playwright test
-
       - name: Run tests
         run: |
           npx playwright install --with-deps chromium
