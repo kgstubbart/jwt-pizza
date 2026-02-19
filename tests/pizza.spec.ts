@@ -333,3 +333,12 @@ test("diner dashboard (mocked)", async ({ page }) => {
 	await page.getByRole("link", { name: "KC" }).click();
 	await expect(page.getByRole("list")).toContainText("diner-dashboard");
 });
+
+test("invalid login", async ({ page }) => {
+    await basicInit(page);
+    await page.getByRole("link", { name: "Login" }).click();
+    await page.getByRole("textbox", { name: "Email address" }).fill("d@jwt.com");
+    await page.getByRole("textbox", { name: "Password" }).fill("wrongpassword");
+    await page.getByRole("button", { name: "Login" }).click();
+    await expect(page.getByRole("textbox", { name: "Email address" })).toBeVisible();
+});
