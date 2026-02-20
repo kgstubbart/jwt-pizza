@@ -56,16 +56,17 @@ export default function AdminDashboard(props: Props) {
   }
 
   async function deleteUser(userId: number) {
-    await pizzaService.deleteUser(userId);
-    const val = filterUserRef.current?.value ?? '';
-    const name = val === '' ? '*' : `*${val}*`;
+  setUserList((prev) => ({
+    ...prev,
+    users: prev.users.filter((u) => Number(u.id) !== userId),
+  }));
 
-    const remainingUsers = userList.users.length - 1;
-    const nextPage = remainingUsers <= 0 && userPage > 1 ? userPage - 1 : userPage;
+  await pizzaService.deleteUser(userId);
 
-    setUserPage(nextPage);
-    await loadUsers(nextPage, name);
-  }
+  const val = filterUserRef.current?.value?.trim() ?? '';
+  const name = val === '' ? '*' : `*${val}*`;
+  await loadUsers(userPage, name);
+}
 
   let response = <NotFound />;
   if (Role.isRole(props.user, Role.Admin)) {
