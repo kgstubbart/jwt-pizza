@@ -1,8 +1,11 @@
 import { test, expect } from "playwright-test-coverage";
 import { installMockBackend } from "./mockBackend";
 
+test.beforeEach(async ({ page }) => {
+  if (process.env.CI) await installMockBackend(page);
+});
+
 test("updateUser", async ({ page }) => {
-	if (process.env.CI) await installMockBackend(page);
 	let email = `user${Math.floor(Math.random() * 10000)}@jwt.com`;
 	await page.goto("/");
 	await page.getByRole("link", { name: "Register" }).click();
