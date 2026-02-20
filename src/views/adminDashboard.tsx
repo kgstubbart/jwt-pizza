@@ -16,12 +16,16 @@ export default function AdminDashboard(props: Props) {
   const [franchiseList, setFranchiseList] = React.useState<FranchiseList>({ franchises: [], more: false });
   const [franchisePage, setFranchisePage] = React.useState(0);
   const filterFranchiseRef = React.useRef<HTMLInputElement>(null);
+  const [userList, setUserList] = React.useState<{ users: User[]; more: boolean }>({ users: [], more: false });
+  const [userPage, setUserPage] = React.useState(1);
+  const filterUserRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     (async () => {
+      await loadUsers(userPage, '*');
       setFranchiseList(await pizzaService.getFranchises(franchisePage, 3, '*'));
     })();
-  }, [props.user, franchisePage]);
+  }, [props.user, userPage, franchisePage]);
 
   function createFranchise() {
     navigate('/admin-dashboard/create-franchise');
@@ -37,6 +41,17 @@ export default function AdminDashboard(props: Props) {
 
   async function filterFranchises() {
     setFranchiseList(await pizzaService.getFranchises(franchisePage, 10, `*${filterFranchiseRef.current?.value}*`));
+  }
+
+  async function loadUsers(page = userPage, name = '*') {
+    setUserList(await pizzaService.listUsers(page, 10, name));
+  }
+
+  async function filterUsers() {
+    const names = filterUserRef.current?.value ?? '';
+    const name = names === '' ? '*' : `*${names}*`;
+    setUserPage(1);
+    await loadUsers(1, name);
   }
 
   let response = <NotFound />;
