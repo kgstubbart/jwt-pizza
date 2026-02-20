@@ -49,13 +49,23 @@ export default function AdminDashboard(props: Props) {
 }
 
   async function filterUsers() {
-    const names = filterUserRef.current?.value ?? '';
-    const name = names === '' ? '*' : `*${names}*`;
+    const val = filterUserRef.current?.value ?? '';
+    const name = val === '' ? '*' : `*${val}*`;
     setUserPage(1);
     await loadUsers(1, name);
   }
 
-  async function deleteUser(userId: number) {}
+  async function deleteUser(userId: number) {
+    await pizzaService.deleteUser(userId);
+    const val = filterUserRef.current?.value ?? '';
+    const name = val === '' ? '*' : `*${val}*`;
+
+    const remainingUsers = userList.users.length - 1;
+    const nextPage = remainingUsers <= 0 && userPage > 1 ? userPage - 1 : userPage;
+
+    setUserPage(nextPage);
+    await loadUsers(nextPage, name);
+  }
 
   let response = <NotFound />;
   if (Role.isRole(props.user, Role.Admin)) {
@@ -170,7 +180,7 @@ export default function AdminDashboard(props: Props) {
                           type="button"
                           aria-label={`Delete ${u.name}`}
                           className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800"
-                          // onClick={() => deleteUser(u.id)}
+                          onClick={() => deleteUser((Number(u.id)))}
                         >
                           <TrashIcon />
                         </button>
