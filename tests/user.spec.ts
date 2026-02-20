@@ -1,6 +1,8 @@
 import { test, expect } from "playwright-test-coverage";
+import { installMockBackend } from './mockBackend';
 
 test("updateUser", async ({ page }) => {
+    if (process.env.CI) await installMockBackend(page);
 	let email = `user${Math.floor(Math.random() * 10000)}@jwt.com`;
 	await page.goto("/");
 	await page.getByRole("link", { name: "Register" }).click();
@@ -48,6 +50,7 @@ test("updateUser", async ({ page }) => {
 });
 
 test("listUsers", async ({ page }) => {
+    if (process.env.CI) await installMockBackend(page);
     await page.goto("/");
     await page.getByRole("link", { name: "Login" }).click();
     await page.getByRole("textbox", { name: "Email address" }).fill("a@jwt.com");
@@ -66,6 +69,7 @@ test("listUsers", async ({ page }) => {
 });
 
 test("deleteUser", async ({ page }) => {
+    if (process.env.CI) await installMockBackend(page);
     let user = `user${Math.floor(Math.random() * 10000)}`;
     let email = `${user}@jwt.com`;
 	await page.goto("/");
